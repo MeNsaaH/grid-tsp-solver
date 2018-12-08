@@ -5,6 +5,7 @@ Grid point represent Grids that encompases Points
 """ 
 from .point import Point 
 import numpy as np
+from matplotlib.patches import Rectangle
 
 class Grid:
 	def __init__(self, coords):
@@ -54,22 +55,6 @@ class Grid:
 		sum = np.sum(self._points)/len(self._points)
 		return Point(sum[0], sum[1])
 
-	def plot(self, ax, data1, data2, param_dict):
-		""" 
-		Displays the Grid on the graph 
-
-		ax : Axes
-			The axes to draw to
-		data1 : array
-			The x data
-		data2 : array
-			The y data
-		param_dict : dict
-			Dictionary of kwargs to pass to ax.plot
-		"""
-		out = ax.plot(data1, data2, **param_dict)
-		return out
-
 	def add_point(self, point):
 		""" Add a point to the Grid """
 		self.points.append(point)
@@ -97,7 +82,14 @@ class Grid:
 		""" Returns whether a point is contained in a grid or not"""
 		return	(self.x_coords[0] <= point[0] <= self.x_coords[1]) and \
 			(self.y_coords[0] <= point[1] <= self.y_coords[1])
+
+	def all_visited(self):
+		""" Returns whether all the points of the grid have being visited """
+		return len(self._points) <= 0
 	
+	def plot(self, ax, with_points=False):
+		""" Plots the Grid on axes ax """
+
 
 class CentricGrid(Grid):
 	""" The Centric Grid of the map 

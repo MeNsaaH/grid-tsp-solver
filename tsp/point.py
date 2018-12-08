@@ -2,8 +2,9 @@
 import numpy as np
 
 class Point:
-	def __init__(self, x, y):
+	def __init__(self, x, y, grid_index=None):
 		self.coord = np.array([x, y])
+		self._grid_index = grid_index
 
 	def __str__(self):
 		return f"<Point {self.x}, {self.y}>"
@@ -40,10 +41,7 @@ class Point:
 	def y(self):
 		return self.coord[1]
 
-
-# if __name__ == '__main__':
-# 	x = Point(1, 4)
-# 	print(x)
-# 	y = Point(3, 5)
-# 	print(Point.distance_from(y, x))
-# 	
+	@property
+	def grid_index(self):
+		return self._grid_index
+	
