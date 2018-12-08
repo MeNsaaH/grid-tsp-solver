@@ -8,8 +8,14 @@ class Point:
 	def __str__(self):
 		return f"<Point {self.x}, {self.y}>"
 
+	def __repr__(self):
+		return f"<Point {int(self.x)}, {int(self.y)}>"
+
 	def __call__(self):
 		return self.coord
+
+	def __getitem__(self, index):
+		return self.coord[index]
 
 	@staticmethod
 	def distance_from(point_A, point_B):
