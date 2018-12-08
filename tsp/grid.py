@@ -32,6 +32,10 @@ class Grid:
 		""" Return point contained in Grid with index """
 		return self._points[index]
 
+	def __len__(self):
+		""" Return number of points in the grid """
+		return len(self._points)
+
 	def calculate_costs(self, points, centric_point):
 		""" Returns the accumulated costs of all point in `points` from the centric_point """
 		return np.round(np.power(np.square(points - centric_point).sum(1), 0.5)).sum()
@@ -45,10 +49,9 @@ class Grid:
 	def points(self):
 		return self._points
 	
-	@staticmethod
-	def calculate_centric_point(points):
-		""" Calculates the centric_point of the grids """
-		sum = points.sum(0)/len(points)
+	def calculate_centric_point(self):
+		""" Calculate the centric_point of the grids """
+		sum = np.sum(self._points)/len(self._points)
 		return Point(sum[0], sum[1])
 
 	def plot(self, ax, data1, data2, param_dict):

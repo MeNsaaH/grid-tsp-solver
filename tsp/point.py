@@ -14,6 +14,15 @@ class Point:
 	def __call__(self):
 		return self.coord
 
+	def __add__(self, point):
+		return Point(self.coord[0]+point[0], self.coord[1]+point[1])
+
+	def __mul__(self, scalar):
+		return Point(self.coord[0]*scalar, self.coord[1]*scalar)		
+
+	def __truediv__(self, scalar):
+		return Point(self.coord[0]/scalar, self.coord[1]/scalar)
+
 	def __getitem__(self, index):
 		return self.coord[index]
 
