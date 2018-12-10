@@ -12,7 +12,7 @@ The Algorithm will be also incorporated with a cost to determine how relatively 
 
 A cost factor will be introduced to ensure that at 1/4 completed points, the omniscient point should shift towards the start point. This should make all movement then tend towards the start point while still looking for the closest point.
 
-It's intuitive to say that the algorithm should be kinda intelligent when doing so, but I don't think so (:
+It's intuitive to say that the algorithm should be kinda intelligent when doing so, but I don't think so 😊
 
 ## HOW IT WORKS
 I'm not a data scientist 😆, so my cost functions are not efficient to say. We need a better cost function for this to kinda work efficiently
