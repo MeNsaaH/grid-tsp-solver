@@ -1,6 +1,6 @@
-# RECURSIVE N-MEANS WITH OMNISCIENT POINT
+# GRID WITH OMNISCIENT REFERENCE POINT 
 
-Solving TSP by changing focus to an omniscient director more than a JIT direction. This algorithm uses a grid system to try to generate a first route of locations optimal than the greedy algorithm. 
+Solving Approximate first time TSP by changing focus to an omniscient director more than a JIT direction used by Greedy Algorithm. This algorithm uses a grid system to try to generate a first route of locations optimal than the greedy algorithm. 
 
 Grids are used to divide the points to be routed. This makes each grids contain points which are closer to say.
 Movement from one point to another then is dictated by how close the two points are, how close their grid locations are and how close the grid is from the local omniscient point.
