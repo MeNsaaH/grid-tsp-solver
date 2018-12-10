@@ -1,5 +1,6 @@
 # Solving TSP:
 ### By Mmadu Manasseh
+##### Just know I'm not a Data Scientist, some functions might be poorly implemented, but still want to try  🤓
 
 ## GRID WITH OMNISCIENT REFERENCE POINT 
 
