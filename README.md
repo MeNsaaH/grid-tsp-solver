@@ -53,6 +53,7 @@ x.visualize_output()
 
 - Convert implementation to Numpy, pandas
 - Optimize Calculation
+- Better documentation and README 
 
 ## ANOTHER-ROUGH-TRY: Recursive k-Means TSP Solver
 Another Solution I will like to dive into is a solution that still uses k-means to segment points. A `gnome` is created which maps n locations to itself in such a way that every location it mapped to one `gnome`. Each `gnome` then has an `entry` and an `exit` point and a specified route that leads from the `entry` through all the mapped points to the `exit`. 
