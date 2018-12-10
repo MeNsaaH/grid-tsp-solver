@@ -15,16 +15,15 @@ A cost factor will be introduced to ensure that at 1/4 completed points, the omn
 It's intuitive to say that the algorithm should be kinda intelligent when doing so, but I don't think so (:
 
 ## HOW IT WORKS
-- The algorithm tries to segment and direct the movement of the Travelling Salesman from a single centry point
-- The points are segmented into grids of equal width and height
-- The next point B from current point A is the point with the lowest cost calculated as:
+I'm not a data scientist 😆, so my cost functions are not efficient to say. We need a better cost function for this to kinda work efficiently
 
-	`The cost from A to B` * `the Cost from A to grid A` * `the cost from grid A to the generic center`
+The cost from a point `A` to `B` is computed as thus: 
+Cost = `The cost from A to B` * `the Cost from A to grid A` * `the cost from grid A to the generic center`
 
 ## Costs Breakdown
-- *`Cost from A to B`*: This is the Euclidean Distance from point A to Point B
-- *`Cost from A to Grid A`*: This is the Euclidean Distance from point A to the center of the Grid where A is in
-- *`Cost from Grid A to generic Center`*: This is the Euclidean Distance from grid A to the generic Epicenter of the graph
+- *`Cost from A to B`*: This is the Distance from point A to Point B
+- *`Cost from A to Grid A`*: This is the Distance from point A to the center of the Grid where A is in
+- *`Cost from Grid A to generic Center`*: This is the Distance from grid A to the generic Epicenter of the graph
 
 ## TODO
 
