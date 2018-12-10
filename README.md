@@ -1,4 +1,6 @@
-# GRID WITH OMNISCIENT REFERENCE POINT 
+# Solving TSP:
+
+## GRID WITH OMNISCIENT REFERENCE POINT 
 
 Solving Approximate first time TSP by changing focus to an omniscient director more than a JIT direction used by Greedy Algorithm. This algorithm uses a grid system to try to generate a first route of locations optimal than the greedy algorithm. 
 
@@ -31,7 +33,7 @@ Cost = `The cost from A to B` * `the Cost from A to grid A` * `the cost from gri
 - Convert implementation to Numpy, pandas
 - Optimize Calculation
 
-## Recursive k-Means TSP Solver
+## ANOTHER-ROUGH-TRY: Recursive k-Means TSP Solver
 Another Solution I will like to dive into is a solution that still uses k-means to segment points. A `gnome` is created which maps n locations to itself in such a way that every location it mapped to one `gnome`. Each `gnome` then has an `entry` and an `exit` point and a specified route that leads from the `entry` to the `exit`. 
 
 An upper layer of say `gnomes` are created which maps n `gnomes` of the lower layer to it. And continuously until a layer of high level mapping is established. Movements are dictated from the highest layer level, which are then mapped down the layers to the locations. 
