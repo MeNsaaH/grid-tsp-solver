@@ -13,7 +13,7 @@ The Omniscient Reference point serves as a reference to the density of the remai
 ### Future Adjustment
 The Algorithm will be also incorporated with a cost to determine how relatively far the points move from the start point. Another important factor in the TSP is the last point to arrive before getting to the start point. For the Greedy algorithm, sometimes the point is far from the start point. 
 
-A cost factor will be introduced to ensure that at 1/4 completed points, the omniscient point should shift towards the start point. This should make all movement then tend towards the start point while still looking for the closest point.
+A cost factor will be introduced to ensure that at 1/4 or less (or a factor computed by the number of locations) completed points, the omniscient point should shift towards the start point. This should make all movement then tend towards the start point while still looking for the closest point.
 
 It's intuitive to say that the algorithm should be kinda intelligent when doing so, but I don't think so 😊
 
