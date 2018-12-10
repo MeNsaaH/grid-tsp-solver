@@ -256,7 +256,7 @@ class OmniscientReference:
 		pass
 
 	def plot(self, ax):
-		ax.scatter(self.coords[0], self.coords[1], color='green')
+		ax.scatter(self.coords[0], self.coords[1], color='blue')
 
 	@property
 	def coords(self):

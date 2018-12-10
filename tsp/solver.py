@@ -15,7 +15,7 @@ class Solver:
 		Movement from point to point is tracked more on a Grid Basis than 
 		a Point to Point Basis
 	"""
-	def __init__(self, points, n_grid=3, start_coords=np.array([0,0])):
+	def __init__(self, points, n_grid=5, start_coords=np.array([0,0])):
 		""" Initialize the data model for the TSP Solver
 			Parameters
 			------------
@@ -38,6 +38,7 @@ class Solver:
 		self.point_to_grid_index = []
 		self.start_coords = start_coords
 		self._result = None
+		self._use_greedy = False
 
 	def __str__(self):
 		return f"<TSPSolver for {len(self._points)} Coords>"
@@ -113,11 +114,13 @@ class Solver:
 	def points(self):
 		return self._points
 	
-	def navigate(self):
+	def navigate(self, greedy=False):
 		""" Start navigating and solving the problem """
 
 		# NOTE This looks very ineffective. It needs the help of some data Science
 		# Get the Grid index of the starting point
+		if greedy:
+			self._use_greedy = True
 		for i, grid in enumerate(self.grids):
 			if grid.contains(Point(self.start_coords)):
 				start_pos = Point(self.start_coords, grid_index=i)
@@ -129,7 +132,10 @@ class Solver:
 		# keep moving until you have it all sorted out
 		current_pos = start_pos
 		while len(points_visited) < len(self._points):
-			next_pos = self.get_next_pos(current_pos)
+			if greedy:
+				next_pos = self.greedy_closest_point(current_pos)
+			else:
+				next_pos = self.get_next_pos(current_pos)
 			points_visited.append(next_pos)
 			current_pos = next_pos
 			print(f'next-stop: {current_pos}')
@@ -166,6 +172,26 @@ class Solver:
 		self.available_points[lowest_point_index] = None
 		self.available_points = np.take(self.available_points, np.nonzero(self.available_points))[0]
 		return lowest_cost_point
+
+	def greedy_closest_point(self, current_pos):
+		""" Uses Greedy algorithm to get the closest point from the current position """
+		owest_cost_point = None
+		# TODO marginalize this value even though something tells me it doesn't matter
+		lowest_cost_for_lowest_cost_point = 10000000
+		current_pos_grid = self._grids[current_pos.grid_index]
+		lowest_point_index = None
+		# Use Numpy to get the cost of the available points matrix and return the lowest
+		for i, point in enumerate(self.available_points):
+			total_cost = current_pos.distance_cost(point) 
+			if total_cost < lowest_cost_for_lowest_cost_point:
+				lowest_cost_point = point
+				lowest_cost_for_lowest_cost_point = total_cost
+				lowest_point_index = i
+		# Remove index from available points
+		self.available_points[lowest_point_index] = None
+		self.available_points = np.take(self.available_points, np.nonzero(self.available_points))[0]
+		return lowest_cost_point
+
 
 	def visualize_input(self, type='all'):
 		""" Display data in graph
@@ -207,8 +233,9 @@ class Solver:
 		points = np.vstack(points)
 		plt.plot(points[:, 0], points[:, 1])
 		plt.scatter(points[:, 0], points[:, 1], color='green')
-		grid_colors = 'rbg'
-		for i, grid in enumerate(self._grids):
-			grid.plot(plt, color=grid_colors[i%3])
-		self.centric_grid_point.plot(plt)
+		if not self._use_greedy:
+			grid_colors = 'rbg'
+			for i, grid in enumerate(self._grids):
+				grid.plot(plt, color=grid_colors[i%3])
+			self.centric_grid_point.plot(plt)
 		plt.show()
