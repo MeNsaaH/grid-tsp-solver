@@ -1,4 +1,5 @@
 # Solving TSP:
+### By Mmadu Manasseh
 
 ## GRID WITH OMNISCIENT REFERENCE POINT 
 
