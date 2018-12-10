@@ -18,6 +18,7 @@ It's intuitive to say that the algorithm should be kinda intelligent when doing 
 I'm not a data scientist 😆, so my cost functions are not efficient to say. We need a better cost function for this to kinda work efficiently
 
 The cost from a point `A` to `B` is computed as thus: 
+
 Cost = `The cost from A to B` * `the Cost from A to grid A` * `the cost from grid A to the generic center`
 
 ## Costs Breakdown
