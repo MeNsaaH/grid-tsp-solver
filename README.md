@@ -3,6 +3,7 @@
 ##### Just know I'm not a Data Scientist, some functions might be poorly implemented, but still want to try  🤓
 
 ## GRID WITH OMNISCIENT REFERENCE POINT 
+### Implementation is still in Progress
 
 Solving Approximate first time TSP by changing focus to an omniscient director more than a JIT direction used by Greedy Algorithm. This algorithm uses a grid system to try to generate a first route of locations optimal than the greedy algorithm. 
 
