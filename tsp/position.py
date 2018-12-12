@@ -4,21 +4,16 @@ import math
 from matplotlib.patches import Rectangle
 
 class Point:
-	def __init__(self, coord, grid_index=None, id=None):
+	def __init__(self, coord):
 		""" Initialize a point on the Graph
 		coord: int or ndarray
 			if only x is specified, then a 1x2 array with coordinates
-		grid_index: int
-			The index number of the grid the point is located in the grids list.
-			This is to provide an easy lookup for any point
-		id: int
-			The id of the point on the input dataset
 		"""
 		if np.array(coord).shape != (2,):
 			raise Exception("Invalid Coordinate passed, Coordinate should be a 1x2 array")
 		self.coord = np.array(coord)
-		self._grid_index = grid_index
-		self._id = id
+		# The id of the point on its grid
+		self._grid_id = None
 
 	def __str__(self):
 		return f"<{self.x}, {self.y}>"
@@ -65,13 +60,28 @@ class Point:
 		return self.coord >= point.coord
 
 	def __eq__(self, point):
-		return self.coord == point.coord
+		return np.all(self.coord == point.coord)
 
 	def hyp(self):
 		return (np.abs(self.coord)).sum()
 
+	def set_grid_id(self, id):
+		if self._grid_id is not None:
+			raise Exception("Point already has a grid")
+		self._grid_id = id
+
+	def update_grid_id(self, id):
+		""" update id of point in the grid 
+			This is necessary when a point is deleted from the grid
+		"""
+		self._grid_id = id
+
 	def distance_cost(self, dest_point):
 		return Point.distance_from(self, dest_point)
+
+	@property
+	def grid_id(self):
+		return self._grid_id
 
 	@staticmethod
 	def distance_from(point_A, point_B):
@@ -88,14 +98,6 @@ class Point:
 	def y(self):
 		return self.coord[1]
 
-	@property
-	def grid_index(self):
-		return self._grid_index
-
-	@property
-	def id(self):
-		return self._id
-	
 
 def calculate_costs(points, centric_point):
 	""" Returns the accumulated costs of all point in `points` from the centric_point """
@@ -142,9 +144,11 @@ class Grid:
 	@property
 	def cost(self):
 		""" Cumulated costs of points from the centric point """
-		if not self._cost:
-			self._cost = calculate_costs(self.points, self.centric_point)
 		return self._cost
+
+	def compute_cost(self):
+		""" Recompute the total costs """
+		self._cost = calculate_costs(self.points, self.centric_point)
 	
 	@property
 	def points(self):
@@ -162,8 +166,11 @@ class Grid:
 
 	@property
 	def centric_point(self):
+		""" Calculate center of points density of grid """
+		# if grid has no points return the center of the grid
 		if not self.has_points:
-			return Point((self.x_coords.sum(), self.y_coords.sum()))
+			return Point((self.x_coords.sum()/2, self.y_coords.sum()/2))
+		# if centric point has not being calculated, recalculate🤕
 		if not self._centric_point:
 			self._centric_point = self.calculate_centric_point()
 		return self._centric_point
@@ -171,11 +178,22 @@ class Grid:
 	def add_point(self, point):
 		""" Add a point to the Grid """
 		self._points = np.append(self.points, point)
+		point.set_grid_id(len(self.points)-1)
 
 	def remove_point(self, point):
 		""" Remove point from list of points in Grid """
 		# TODO Look for an efficient way todo all this
-		pass
+		# Update the ids of other points in the grid
+		# Very inefficient way of doing this I think😕
+		# Using this for Now
+		for i, _point in enumerate(self._points):
+			if point == _point:
+				self._points = np.delete(self._points, i)
+		# TODO This might be a better way to do this
+		# self._points = np.delete(self._points, point.grid_id)
+		# if self.has_points:
+		# 	for i in range(point.grid_id, len(self._points)):
+		# 		self._points[i].update_grid_id(i-1)
 
 	@property
 	def x_coords(self):
@@ -246,14 +264,11 @@ class OmniscientReference:
 
 	@classmethod
 	def derive_from_grids(cls, grids):
+		""" create reference point from a list of grids """
 		# Get list of all grid centric points
 		_grid_centric_points = [ grid.centric_point for grid in grids ]
 		sum_ = np.sum(_grid_centric_points)/len(_grid_centric_points)
 		return cls(sum_, grids)
-
-	def grid_cost(self, grid):
-		""" Return the cost of moving from the grid to the omniscient point """
-		pass
 
 	def plot(self, ax):
 		ax.scatter(self.coords[0], self.coords[1], color='blue')
