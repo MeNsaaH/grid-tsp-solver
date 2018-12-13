@@ -134,4 +134,4 @@ build
 # visual studio code
 .vscode/
 tags
-
+_try.py
