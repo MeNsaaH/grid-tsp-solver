@@ -39,6 +39,8 @@ class Solver:
 		self.start_pos = Point(start_coords)
 		self._result = None
 		self._use_greedy = False
+		self._travelling_costs = 0
+		self.map_grids_to_points()
 
 	def __str__(self):
 		return f"<TSPSolver for {len(self._points)} Coords>"
@@ -80,6 +82,12 @@ class Solver:
 					grid.add_point(self._points[i])
 					break
 		self._points = np.array(self._points)
+		# Add Starting point to grid
+		for grid in self.grids:
+			if grid.contains(self.start_pos):
+				grid.add_point(self.start_pos)
+				break
+		self._grids_for_calc = self._grids
 		# Compute grid centric points and omniscient_reference point
 		self.compute_cost()
 		
@@ -108,21 +116,15 @@ class Solver:
 	def navigate(self, greedy=False):
 		""" Start navigating and solving the problem """
 
-		# NOTE This looks very ineffective. It needs the help of some data Science
-		
+		# NOTE This IMplementation is very ineffective. It needs the help of some data Science
+		if not self.grids:
+			raise Exception("Grids not matched to points yet, run `Solver.map_grids_to_points`")
+		self.map_grids_to_points()
 		# Get the Grid index of the starting point
 		if greedy:
 			self._use_greedy = True
-		else:
-			if not self.grids:
-				raise Exception("Grids not matched to points yet, run `Solver.map_grids_to_points`")
-		for grid in self.grids:
-			if grid.contains(self.start_pos):
-				grid.add_point(self.start_pos)
-				break
 		# list of visited cities in that order
 		points_visited = [self.start_pos,]
-		
 		# keep moving until you have it all sorted out
 		current_pos = self.start_pos
 		while len(points_visited) < len(self._points):
@@ -151,7 +153,7 @@ class Solver:
 		# TODO marginalize this value even though something tells me it doesn't matter
 		cost_for_lowest_cost_point = 10000000
 		# Use Numpy to get the cost of the available points matrix and return the lowest
-		for grid in self._grids:
+		for grid in self._grids_for_calc:
 			for point in grid.points:
 				if self._use_greedy:
 					total_cost = current_pos.distance_cost(point)
@@ -165,7 +167,6 @@ class Solver:
 					lowest_cost_point = point
 					cost_for_lowest_cost_point = total_cost
 					grid_with_lowest_point = grid
-		
 		# Remove point from the available grid points
 		grid_with_lowest_point.remove_point(lowest_cost_point)
 		self.compute_cost()
@@ -173,10 +174,10 @@ class Solver:
 
 	def compute_cost(self):
 		""" Recompute the cost of all grids """
-		for grid in self._grids:
+		for grid in self._grids_for_calc:
 			grid.compute_cost()
 		# Get the OmniscientReference point after matching all points
-		self.centric_grid_point = OmniscientReference.derive_from_grids(self._grids)
+		self.centric_grid_point = OmniscientReference.derive_from_grids(self._grids_for_calc)
 
 	def visualize_input(self, type='all'):
 		""" Display data in graph
@@ -229,6 +230,18 @@ class Solver:
 		""" Calculate total tarvelling costs """
 		if not self._result:
 			raise NoOutput("First Run `Solver.navigate()` to get the route")
+		# Reset Travelling Costs
 		self._travelling_costs = 0
-		for point in self._result:
-			print(point)
+		# Inefficiency at its base 😢
+		# calculate the Distance between each two points
+		for i, point in enumerate(self._result):
+			# if point is at edge compute cost to beginning
+			if i == len(self._result)-1:
+				self._travelling_costs += point.distance_cost(self._result[0])
+			else:
+				self._travelling_costs += point.distance_cost(self._result[i+1])
+	@property
+	def total_travelling_costs(self):
+		self.calculate_navigation_costs()
+		return self._travelling_costs
+	

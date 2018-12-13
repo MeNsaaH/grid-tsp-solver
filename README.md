@@ -34,20 +34,20 @@ Cost = `The cost from A to B` * `the Cost from A to grid A` * `the cost from gri
 ## Using the Code
 
 ```python
-import tsp
-
-x = tsp.Solver(input_points, n_grids=8, start_coords=np.array([0, 0]))
-# To see the inputs data
-x.visualize_input()
-# Use the navigate to get the routes
-x.navigate()
-x.visualize_output()
-x.write_output(filename)
-print(x.total_travelling_costs)
-
-# You can also check for the greedy version to compare
-x.navigate(greedy=True)
-x.visualize_output()
+>>> import tsp
+>>> 
+>>> x = tsp.Solver(input_points, n_grids=8, start_coords=np.array([0, 0]))
+>>> # To see the inputs data
+>>> x.visualize_input()
+>>> # Use the navigate to get the routes
+>>> x.navigate()
+>>> x.visualize_output()
+>>> x.write_output(filename)
+>>> x.total_travelling_costs
+>>> 
+>>> # You can also check for the greedy version to compare
+>>> x.navigate(greedy=True)
+>>> x.visualize_output()
 
 ```
 ## TODO
