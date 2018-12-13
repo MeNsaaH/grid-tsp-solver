@@ -113,6 +113,9 @@ class Solver:
 		# Get the Grid index of the starting point
 		if greedy:
 			self._use_greedy = True
+		else:
+			if not self.grids:
+				raise Exception("Grids not matched to points yet, run `Solver.map_grids_to_points`")
 		for grid in self.grids:
 			if grid.contains(self.start_pos):
 				grid.add_point(self.start_pos)
@@ -221,3 +224,11 @@ class Solver:
 				grid.plot(plt, color=grid_colors[i%3])
 			self.centric_grid_point.plot(plt)
 		plt.show()
+
+	def calculate_navigation_costs(self):
+		""" Calculate total tarvelling costs """
+		if not self._result:
+			raise NoOutput("First Run `Solver.navigate()` to get the route")
+		self._travelling_costs = 0
+		for point in self._result:
+			print(point)
